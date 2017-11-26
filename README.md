@@ -8,5 +8,5 @@ As for programmer I prefer to write stuff quickly in markdown. Be it email, docs
 
 ## Known Issues
 
-* Currently it works only on Windows, using powershell cmd. **Pull requests are welcome.**
+* Currently it works only on Windows, since it uses [win-clipboard](https://github.com/mlewand/win-clipboard). **Pull requests are welcome.**
 * Doesn't put plain text, just HTML mime type.
