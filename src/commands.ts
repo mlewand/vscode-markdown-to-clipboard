@@ -1,7 +1,7 @@
 import * as vscode from 'vscode';
 import * as marked from 'marked';
-import * as nodePowershell from 'node-powershell';
-import * as escape from 'any-shell-escape';
+import * as winClipboard from 'win-clipboard';
+import * as htmlToText from 'html-to-text';
 
 export default {
 	copyToClipboard: function( editor: vscode.TextEditor, edit: vscode.TextEditorEdit ) {
@@ -11,15 +11,12 @@ export default {
 		this._saveToClipboard( marked( mdSource ) );
 	},
 
+	// Store reference to winClipboard to allow stubbing in unit tests.
+	_winClipboard: winClipboard,
+
 	_saveToClipboard: function( html: string ) {
-		let ps = new nodePowershell( {
-			executionPolicy: 'Bypass',
-			noProfile: true,
-			debugMsg: false
-		} );
-
-		ps.addCommand( 'Set-Clipboard -AsHtml -Value ' + escape( html.replace( /\r?\n/g, '' ) ) );
-
-		return ps.invoke();
+		this._winClipboard.clear();
+		this._winClipboard.setText( htmlToText.fromString( html, { wordwrap: false } ) );
+		this._winClipboard.setHtml( html );
 	}
 };
