@@ -2,7 +2,7 @@
   "name": "vscode-markdown-to-clipboard",
   "displayName": "Markdown to clipboard",
   "description": "An extension that renders your markdown file to clipboard as rich text, so that you can paste it to any ord processor.",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "publisher": "mlewand",
   "license": "MIT",
   "repository": {
