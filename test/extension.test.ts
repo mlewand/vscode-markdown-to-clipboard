@@ -10,7 +10,6 @@ chai.use( sinonChai );
 
 const expect = chai.expect;
 
-// Defines a Mocha test suite to group tests of similar kind together
 describe( 'copyToClipboard command', () => {
     let saveToClipboardStub;
 
@@ -46,5 +45,40 @@ describe( 'copyToClipboard command', () => {
                 commands.copyToClipboard( textEditor, null );
                 expect( saveToClipboardStub ).to.be.calledOnce.and.calledWith( '<p>oo\nbar</p>\n' );
             } );
+    } );
+} );
+
+describe( '_saveToClipboard method', () => {
+    before(() => {
+        sinon.stub( commands._winClipboard, 'clear' );
+        sinon.stub( commands._winClipboard, 'setText' );
+        sinon.stub( commands._winClipboard, 'setHtml' );
+    } );
+
+    beforeEach(() => {
+        commands._winClipboard.clear.reset();
+        commands._winClipboard.setText.reset();
+        commands._winClipboard.setHtml.reset();
+    } );
+
+    after(() => {
+        commands._winClipboard.clear.restore();
+        commands._winClipboard.setText.restore();
+        commands._winClipboard.setHtml.restore();
+    } );
+
+    it( 'Clears existing clipboard data', () => {
+        commands._saveToClipboard( 'foo' );
+        expect( commands._winClipboard.clear ).to.be.calledOnce;
+    } );
+
+    it( 'Sets HTML clipboard', () => {
+        commands._saveToClipboard( 'foo <b>bar</b> baz' );
+        expect( commands._winClipboard.setHtml ).to.be.calledOnce.and.calledWith( 'foo <b>bar</b> baz' );
+    } );
+
+    it( 'Also sets plain text representation of HTML', () => {
+        commands._saveToClipboard( 'foo <b>bar</b> baz' );
+        expect( commands._winClipboard.setText ).to.be.calledOnce.and.calledWith( 'foo bar baz' );
     } );
 } );

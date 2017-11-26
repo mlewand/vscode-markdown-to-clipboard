@@ -48,8 +48,8 @@
     "vscode-test-content": "^1.2.0"
   },
   "dependencies": {
-    "any-shell-escape": "^0.1.1",
+    "html-to-text": "^3.3.0",
     "marked": "^0.3.6",
-    "node-powershell": "^3.1.1"
+    "win-clipboard": "0.0.5"
   }
 }
