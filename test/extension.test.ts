@@ -71,17 +71,17 @@ describe( '_saveToClipboard method', () => {
     } );
 
     it( 'Clears existing clipboard data', () => {
-        commands._saveToClipboard( 'foo' );
+        commands._saveToClipboard( 'foo', 'foo' );
         expect( commands._winClipboard!.clear ).to.be.calledOnce;
     } );
 
     it( 'Sets HTML clipboard', () => {
-        commands._saveToClipboard( 'foo <b>bar</b> baz' );
+        commands._saveToClipboard( 'foo <b>bar</b> baz', 'foo **bar** baz' );
         expect( commands._winClipboard!.setHtml ).to.be.calledOnce.and.calledWith( 'foo <b>bar</b> baz' );
     } );
 
     it( 'Also sets plain text representation of HTML', () => {
-        commands._saveToClipboard( 'foo <b>bar</b> baz' );
-        expect( commands._winClipboard!.setText ).to.be.calledOnce.and.calledWith( 'foo bar baz' );
+        commands._saveToClipboard( 'foo <b>bar</b> baz', 'foo **bar** baz' );
+        expect( commands._winClipboard!.setText ).to.be.calledOnce.and.calledWith( 'foo **bar** baz' );
     } );
 } );
