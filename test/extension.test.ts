@@ -11,7 +11,7 @@ chai.use( sinonChai );
 const expect = chai.expect;
 
 describe( 'copyToClipboard command', () => {
-    let saveToClipboardStub;
+    let saveToClipboardStub: sinon.SinonStub;
 
     before(() => {
         saveToClipboardStub = sinon.stub( commands, '_saveToClipboard' );
@@ -49,36 +49,39 @@ describe( 'copyToClipboard command', () => {
 } );
 
 describe( '_saveToClipboard method', () => {
+    let clearStub: sinon.SinonStub;
+    let setTextStub: sinon.SinonStub;
+    let setHtmlStub: sinon.SinonStub;
     before(() => {
-        sinon.stub( commands._winClipboard, 'clear' );
-        sinon.stub( commands._winClipboard, 'setText' );
-        sinon.stub( commands._winClipboard, 'setHtml' );
+        clearStub = sinon.stub( commands._winClipboard!, 'clear' );
+        setTextStub = sinon.stub( commands._winClipboard!, 'setText' );
+        setHtmlStub = sinon.stub( commands._winClipboard!, 'setHtml' );
     } );
 
     beforeEach(() => {
-        commands._winClipboard.clear.reset();
-        commands._winClipboard.setText.reset();
-        commands._winClipboard.setHtml.reset();
+        clearStub.reset();
+        setTextStub.reset();
+        setHtmlStub.reset();
     } );
 
     after(() => {
-        commands._winClipboard.clear.restore();
-        commands._winClipboard.setText.restore();
-        commands._winClipboard.setHtml.restore();
+        clearStub.restore();
+        setTextStub.restore();
+        setHtmlStub.restore();
     } );
 
     it( 'Clears existing clipboard data', () => {
-        commands._saveToClipboard( 'foo' );
-        expect( commands._winClipboard.clear ).to.be.calledOnce;
+        commands._saveToClipboard( 'foo', 'foo' );
+        expect( commands._winClipboard!.clear ).to.be.calledOnce;
     } );
 
     it( 'Sets HTML clipboard', () => {
-        commands._saveToClipboard( 'foo <b>bar</b> baz' );
-        expect( commands._winClipboard.setHtml ).to.be.calledOnce.and.calledWith( 'foo <b>bar</b> baz' );
+        commands._saveToClipboard( 'foo <b>bar</b> baz', 'foo **bar** baz' );
+        expect( commands._winClipboard!.setHtml ).to.be.calledOnce.and.calledWith( 'foo <b>bar</b> baz' );
     } );
 
     it( 'Also sets plain text representation of HTML', () => {
-        commands._saveToClipboard( 'foo <b>bar</b> baz' );
-        expect( commands._winClipboard.setText ).to.be.calledOnce.and.calledWith( 'foo bar baz' );
+        commands._saveToClipboard( 'foo <b>bar</b> baz', 'foo **bar** baz' );
+        expect( commands._winClipboard!.setText ).to.be.calledOnce.and.calledWith( 'foo **bar** baz' );
     } );
 } );
